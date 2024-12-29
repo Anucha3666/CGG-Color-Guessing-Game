@@ -22,19 +22,17 @@
 
 1. ดาวน์โหลดหรือโคลนโปรเจกต์นี้
 2. ติดตั้ง dependencies ด้วยคำสั่ง:
-   ````bash
+   ```bash
    npm install
-   หรือ
-   ```bash
+   # หรือ
    yarn
-   ````
+   ```
 3. เริ่มต้นเซิร์ฟเวอร์ด้วยคำสั่ง:
-   ````bash
-   npm run dev
-   หรือ
    ```bash
-   yarn install
-   ````
+   npm run dev
+   # หรือ
+   yarn dev
+   ```
 
 ### วิธีการเล่น
 
@@ -62,19 +60,17 @@ offering endless fun for everyone.
 
 1. Download or clone this project
 2. Install dependencies with:
-   ````bash
+   ```bash
    npm install
-   or
-   ```bash
+   # or
    yarn
-   ````
+   ```
 3. Start the server with:
-   ````bash
-   npm run dev
-   or
    ```bash
-   yarn install
-   ````
+   npm run dev
+   # or
+   yarn dev
+   ```
 
 ### How to Play
 
@@ -100,21 +96,20 @@ offering endless fun for everyone.
 
 1. 下载或克隆此项目
 2. 使用以下命令安装依赖：
-   ````bash
+   ```bash
    npm install
-   或
-   ```bash
+   # 或
    yarn
-   ````
+   ```
 3. 使用以下命令启动服务器：
-   ````bash
-   npm run dev
-   或
+
    ```bash
-   yarn install
-   ````
+   npm run dev
+   # 或
+   yarn dev
+   ```
 
-### 游戏玩法
+### How to Play
 
-1. 在限定时间内选择与问题匹配的颜色。
-2. 挑战更高的分数吧！
+1. Select the color that matches the question within the time limit.
+2. Aim for the highest score!
