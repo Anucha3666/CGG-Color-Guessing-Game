@@ -7,3 +7,7 @@
   margin: 0;
   user-select: none;
 }
+
+.shadow-text {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}

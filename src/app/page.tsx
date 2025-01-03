@@ -1,7 +1,11 @@
-export default function Home() {
+"use client";
+
+import { ColorBubbles } from "@/helpers/color-bubbles";
+
+export default function ColorGuessingGameEntrance() {
   return (
-    <main className=' w-full h-full'>
-      <h1 className='text-3xl font-bold underline'>Hello world!</h1>
-    </main>
+    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 overflow-hidden'>
+      <ColorBubbles />
+    </div>
   );
 }
