@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const ColorBubbles = () => {
   const [bubbles, setBubbles] = useState<
@@ -17,7 +17,7 @@ export const ColorBubbles = () => {
   }, []);
 
   return (
-    <Fragment>
+    <div className='absolute inset-0 top-0 right-0 w-screen h-screen overflow-hidden'>
       {bubbles.map((bubble, i) => (
         <motion.div
           key={i}
@@ -41,6 +41,6 @@ export const ColorBubbles = () => {
           }}
         />
       ))}
-    </Fragment>
+    </div>
   );
 };
