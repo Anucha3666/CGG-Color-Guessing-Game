@@ -8,17 +8,20 @@ import { FC, useState } from "react";
 export type EntrancePageProps = {
   isGameStarted: boolean;
   setIsGameStarted: (isGameStarted: boolean) => void;
+  onStart: () => void;
 };
 
 const EntrancePage: FC<EntrancePageProps> = ({
   isGameStarted,
   setIsGameStarted,
+  onStart,
 }) => {
   const [isStarted, setIsStarted] = useState(isGameStarted);
 
   const ProjectName = "Color Guessing Game";
 
   const startGame = () => {
+    onStart();
     setIsStarted(true);
     setTimeout(() => {
       setIsGameStarted(true);
