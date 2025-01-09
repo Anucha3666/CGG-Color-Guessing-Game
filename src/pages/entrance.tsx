@@ -21,11 +21,11 @@ const EntrancePage: FC<EntrancePageProps> = ({
   const ProjectName = "Color Guessing Game";
 
   const startGame = () => {
-    onStart();
     setIsStarted(true);
     setTimeout(() => {
       setIsGameStarted(true);
     }, 1700);
+    onStart();
   };
 
   return (

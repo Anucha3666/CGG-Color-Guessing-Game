@@ -13,6 +13,8 @@ export default function ColorGuessingGameEntrance() {
   const [gameDatasets, setGameDatasets] = useState<TGameData[]>([]);
   const [timer, setTimer] = useState(0);
 
+  console.log(gameDatasets);
+
   const GenerateHEXColor = () => {
     const randomColor =
       "#" +
@@ -39,14 +41,12 @@ export default function ColorGuessingGameEntrance() {
           `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
         );
       });
-      // setIsFullScreen(true);
     } else {
       document.exitFullscreen().catch((err) => {
         console.error(
           `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
         );
       });
-      // setIsFullScreen(false);
     }
   };
 
@@ -70,7 +70,7 @@ export default function ColorGuessingGameEntrance() {
       const time = setTimeout(() => setTimer(timer - 1), 10);
       return () => clearTimeout(time);
     } else {
-      if (isGameStarted) {
+      if (timer <= 0 && gameDatasets?.length > 0) {
         setGameDatasets(
           gameDatasets
             ?.slice(0, dataSet)
@@ -160,14 +160,14 @@ export default function ColorGuessingGameEntrance() {
                           setTimer(time);
                         }
                       }
-                    }}
-                  />
+                    }}>
+                    {/* {i === gameDatasets[dataSet]?.correct ? 0 : 1} */}
+                  </div>
                 ))}
             </div>
 
             {isGameOver && (
               <button
-                // className='p-4 border-2 rounded-full border-red-600 text-red-600 blur-3xl active:scale-95 gap-2'
                 className=' border-2 border-white p-2 rounded-full flex gap-1 text-white font-medium'
                 onClick={() => {
                   GenerateGameData();

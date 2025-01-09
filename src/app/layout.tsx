@@ -46,11 +46,12 @@ export const metadata: Metadata = {
     title: "Color Guessing Game | Test Your Color Skills | CGG",
     description:
       "Join the exciting Color Guessing Game to test your color-matching abilities! Challenge yourself and enhance your skills. Powered by 36Service [Mahingsa].",
-    url: "https://github.com/Anucha3666",
+    // url: "https://github.com/Anucha3666",
+    url: "https://cgg-color-guessing-game.vercel.app",
     images: [
       {
-        url: "https://yourwebsite.com/images/og-image.jpg",
-        width: 1200,
+        url: "https://raw.githubusercontent.com/Anucha3666/CGG_Color-Guessing-Game/refs/heads/main/src/assets/images/logo-background.png",
+        width: 630,
         height: 630,
         alt: "Color Guessing Game - Test Your Color Skills",
       },
@@ -63,8 +64,8 @@ export const metadata: Metadata = {
       "Play the Color Guessing Game! Test your color recognition and memory in this fun and engaging game for all ages. Powered by 36Service [Mahingsa].",
     images: [
       {
-        url: "https://yourwebsite.com/images/twitter-image.jpg",
-        width: 1200,
+        url: "https://raw.githubusercontent.com/Anucha3666/CGG_Color-Guessing-Game/refs/heads/main/src/assets/images/logo-background.png",
+        width: 630,
         height: 630,
         alt: "Color Guessing Game - Test Your Color Skills",
       },
