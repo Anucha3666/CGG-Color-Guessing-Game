@@ -143,8 +143,8 @@ export default function ColorGuessingGameEntrance() {
                     className='w-full h-full rounded-md cursor-pointer active:scale-95'
                     style={{
                       background: `${gameDatasets[dataSet]?.color}${
-                        ["3", "5", "6", "7", "9", "A", "B", "D", "F"][
-                          i === gameDatasets[dataSet]?.correct ? dataSet : 8
+                        ["3", "5", "6", "7", "9", "A", "B", "C", "D", "F"][
+                          i === gameDatasets[dataSet]?.correct ? dataSet : 9
                         ]
                       }0`,
                     }}
