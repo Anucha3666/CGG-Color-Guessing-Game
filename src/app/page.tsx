@@ -32,6 +32,24 @@ export default function ColorGuessingGameEntrance() {
     setGameDatasets(information);
   };
 
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(
+          `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+        );
+      });
+      // setIsFullScreen(true);
+    } else {
+      document.exitFullscreen().catch((err) => {
+        console.error(
+          `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
+        );
+      });
+      // setIsFullScreen(false);
+    }
+  };
+
   const isLose = gameDatasets?.find(
     ({ answer, correct }) => answer !== null && answer !== correct
   );
@@ -41,7 +59,7 @@ export default function ColorGuessingGameEntrance() {
 
   const isGameOver = isLose || isWin;
   const dataSet = isLose
-    ? gameDatasets.findIndex(({ answer }) => answer === null) - 1
+    ? gameDatasets.filter(({ answer }) => answer !== null)?.length - 1
     : isWin
     ? gameDatasets?.length - 1
     : gameDatasets.findIndex(({ answer }) => answer === null) ??
@@ -52,36 +70,16 @@ export default function ColorGuessingGameEntrance() {
       const time = setTimeout(() => setTimer(timer - 1), 10);
       return () => clearTimeout(time);
     } else {
-      setGameDatasets(
-        gameDatasets
-          ?.slice(0, dataSet)
-          ?.concat({ ...gameDatasets[dataSet], answer: 10 })
-          ?.concat(gameDatasets?.slice(dataSet + 1))
-      );
+      if (isGameStarted) {
+        setGameDatasets(
+          gameDatasets
+            ?.slice(0, dataSet)
+            ?.concat({ ...gameDatasets[dataSet], answer: 10 })
+            ?.concat(gameDatasets?.slice(dataSet + 1))
+        );
+      }
     }
-  }, [timer, isGameOver, dataSet, gameDatasets]);
-
-  useEffect(() => {
-    setTimer(time);
-  }, [isGameStarted]);
-
-  // const toggleFullScreen = () => {
-  //   if (!document.fullscreenElement) {
-  //     document.documentElement.requestFullscreen().catch((err) => {
-  //       console.error(
-  //         `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
-  //       );
-  //     });
-  //     setIsFullScreen(true);
-  //   } else {
-  //     document.exitFullscreen().catch((err) => {
-  //       console.error(
-  //         `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
-  //       );
-  //     });
-  //     setIsFullScreen(false);
-  //   }
-  // };
+  }, [timer, isGameOver, dataSet, gameDatasets, isGameStarted]);
 
   return (
     <div
@@ -106,10 +104,10 @@ export default function ColorGuessingGameEntrance() {
             </p>
             {isGameOver && (
               <p className=' text-lg font-bold'>
-                {isLose ? "Lose" : isWin ? "Win" : ""}
+                {isLose ? "You Lose" : isWin ? "You Win" : ""}
               </p>
             )}
-            <div className='w-full  backdrop-blur-2xl flex justify-center items-center rounded-full h-6 overflow-hidden relative'>
+            <div className='w-full bg-[#FFFFFF40] backdrop-blur-sm flex justify-center items-center rounded-full h-6 overflow-hidden relative'>
               <motion.div
                 animate={{
                   backgroundPosition: ["0% 0%", "100% 0%"],
@@ -169,7 +167,8 @@ export default function ColorGuessingGameEntrance() {
 
             {isGameOver && (
               <button
-                className='p-4 border-2 rounded-full border-red-600 text-red-600 blur-3xl active:scale-95 flex gap-2'
+                // className='p-4 border-2 rounded-full border-red-600 text-red-600 blur-3xl active:scale-95 gap-2'
+                className=' border-2 border-white p-2 rounded-full flex gap-1 text-white font-medium'
                 onClick={() => {
                   GenerateGameData();
                   setTimer(time);
@@ -177,14 +176,15 @@ export default function ColorGuessingGameEntrance() {
                 Restart
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
                   fill='none'
                   stroke='currentColor'
                   stroke-width='2'
-                  stroke-linecap='round'
-                  stroke-linejoin='round'>
+                  // stroke-linecap='round'
+                  // stroke-linejoin='round'
+                >
                   <path d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' />
                   <path d='M3 3v5h5' />
                 </svg>
@@ -193,7 +193,11 @@ export default function ColorGuessingGameEntrance() {
           </div>
         ) : (
           <EntrancePage
-            onStart={GenerateGameData}
+            onStart={() => {
+              GenerateGameData();
+              setTimer(time);
+              toggleFullScreen();
+            }}
             {...{ isGameStarted, setIsGameStarted }}
           />
         )}
