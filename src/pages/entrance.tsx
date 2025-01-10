@@ -4,28 +4,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import Logo from "@/assets/images/logo-no-background.png";
 import Image from "next/image";
 import { FC, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export type EntrancePageProps = {
-  isGameStarted: boolean;
-  setIsGameStarted: (isGameStarted: boolean) => void;
-  onStart: () => void;
-};
-
-const EntrancePage: FC<EntrancePageProps> = ({
-  isGameStarted,
-  setIsGameStarted,
-  onStart,
-}) => {
-  const [isStarted, setIsStarted] = useState(isGameStarted);
+const EntrancePage: FC = ({}) => {
+  const router = useRouter();
+  const [isStarted, setIsStarted] = useState(false);
 
   const ProjectName = "Color Guessing Game";
 
   const startGame = () => {
     setIsStarted(true);
     setTimeout(() => {
-      setIsGameStarted(true);
+      router.push("/home");
     }, 1700);
-    onStart();
   };
 
   return (
