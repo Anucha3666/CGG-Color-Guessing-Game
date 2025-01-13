@@ -2,37 +2,28 @@ import { FC, ReactNode, useRef } from "react";
 import { motion } from "framer-motion";
 
 type ModalProps = {
-  title: string;
-  open: boolean;
-  onOk: () => void;
-  onCancel: () => void;
-  content: ReactNode;
+  open?: boolean;
+  children?: ReactNode;
+  onCancel?: () => void;
 };
 
-export const Button: FC<{
-  type: "primary";
+export const ModalTrigger: FC<{
+  children: ReactNode;
   onClick: () => void;
-  content: ReactNode;
-}> = ({ onClick, content }) => {
+}> = ({ onClick, children }) => {
   return (
     <motion.div layout layoutId='setting-modal' onClick={onClick}>
-      {content}
+      {children}
     </motion.div>
   );
 };
 
-export const Modal: FC<ModalProps> = ({
-  title,
-  open,
-  onOk,
-  onCancel,
-  content,
-}) => {
+export const Modal: FC<ModalProps> = ({ open, children, onCancel }) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onCancel();
+      if (onCancel) onCancel();
     }
   };
 
@@ -45,22 +36,28 @@ export const Modal: FC<ModalProps> = ({
       <motion.div
         layout
         layoutId='setting-modal'
-        className='w-[25rem] h-max bg-white z-50 rounded-md p-4'
+        className='w-[25rem] h-max bg-white z-50 rounded-md p-2 relative'
         ref={modalRef}>
-        <h2 className='text-xl font-bold mb-4'>{title}</h2>
-        <div>{content}</div>
-        <div className='flex justify-end gap-2 mt-4'>
-          <button
-            className='px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400'
-            onClick={onCancel}>
-            Cancel
-          </button>
-          <button
-            className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
-            onClick={onOk}>
-            OK
-          </button>
+        <div
+          className=' absolute top-1 right-1 cursor-pointer '
+          onClick={() => {
+            if (onCancel) onCancel();
+          }}>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'>
+            <path d='M18 6 6 18' />
+            <path d='m6 6 12 12' />
+          </svg>
         </div>
+        {children}
       </motion.div>
     </div>
   );

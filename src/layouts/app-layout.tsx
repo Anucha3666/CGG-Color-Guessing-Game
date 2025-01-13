@@ -9,7 +9,10 @@ export const AppLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className='w-screen h-screen overflow-hidden inset-0 flex flex-col justify-center items-center bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 relative'>
+    <div
+      className='w-screen h-screen overflow-hidden inset-0 flex flex-col justify-center items-center bg-gradient-to-br 
+      from-purple-600 via-pink-600 to-blue-600
+    relative bg-black'>
       <ColorBubbles />
 
       <AppNavbar />
