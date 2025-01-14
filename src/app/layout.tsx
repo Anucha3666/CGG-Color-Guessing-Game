@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   description:
     "Play the Color Guessing Game (CGG) - a fun and challenging game to test your color recognition skills! Match colors accurately within a set time limit and enhance your memory and observation. Perfect for all ages. Enjoy endless fun and improve your skills with CGG! | Powered by 36Service [Mahingsa] |",
   keywords: [
+    "Color",
+    "Guessing",
+    "Game",
     "Color Guessing Game",
     "Color game",
     "Memory game",

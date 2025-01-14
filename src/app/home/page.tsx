@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppSelector } from "@/store/hook";
 import { TGameData } from "@/types";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function HomePage() {
   const time = 1000;
 
+  const { settings } = useAppSelector((store) => store?.utils);
   const [gameDatasets, setGameDatasets] = useState<TGameData[]>([]);
   const [timer, setTimer] = useState<number>(0);
 
@@ -22,7 +24,9 @@ export default function HomePage() {
   const GenerateGameData = () => {
     const information = Array?.from({ length: 9 }, () => ({
       color: GenerateHEXColor(),
-      correct: Math.floor(Math.random() * 9),
+      correct: Math.floor(
+        Math.random() * (settings?.number_of_grids * settings?.number_of_grids)
+      ),
       answer: null,
     }));
 
@@ -107,9 +111,9 @@ export default function HomePage() {
         <div
           className='w-[20rem] h-[20rem] md:w-[30rem] md:h-[30rem] bg-white rounded-lg grid gap-1 p-1'
           style={{
-            gridTemplateColumns: `repeat(${3}, 1fr)`,
+            gridTemplateColumns: `repeat(${settings?.number_of_grids}, 1fr)`,
           }}>
-          {Array(9)
+          {Array(settings?.number_of_grids * settings?.number_of_grids)
             ?.fill(0)
             ?.map((_, i) => (
               <div
@@ -117,7 +121,11 @@ export default function HomePage() {
                 className='w-full h-full rounded-md cursor-pointer active:scale-95'
                 style={{
                   background: `${gameDatasets[dataSet]?.color}${
-                    ["3", "5", "6", "7", "9", "A", "B", "C", "D", "F"][
+                    (settings?.level === "easy"
+                      ? ["1", "2", "3", "4", "5", "6", "7", "8", "9", "F"]
+                      : settings?.level === "medium"
+                      ? ["3", "5", "6", "7", "9", "A", "B", "C", "D", "F"]
+                      : ["5", "6", "7", "8", "9", "A", "B", "C", "E", "F"])[
                       i === gameDatasets[dataSet]?.correct ? dataSet : 9
                     ]
                   }0`,

@@ -1,5 +1,9 @@
+"use cline";
+
 import { FC, useState } from "react";
 import { Modal } from "../common/modal";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { setSettings } from "@/store/features/utils.features";
 
 export type SettingsModalProps = {
   open?: boolean;
@@ -7,10 +11,8 @@ export type SettingsModalProps = {
 };
 
 export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
-  const [data, setData] = useState({
-    number_of_grids: 3,
-    level: "easy",
-  });
+  const { settings } = useAppSelector((store) => store?.utils);
+  const dispatch = useAppDispatch();
   const [hoverGrid, setHoverGrid] = useState<null | number>(null);
 
   return (
@@ -25,12 +27,19 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
           {Array?.from({ length: 3 })?.map((_, i) => (
             <div
               key={i}
-              className={`w-full flex justify-center items-center rounded-md shadow-md ${
-                i + 3 === data?.number_of_grids
+              className={`w-full flex justify-center items-center rounded-md shadow-md cursor-pointer ${
+                i + 3 === settings?.number_of_grids
                   ? " bg-[#03052C] text-white"
                   : " bg-[#FAFAFA]"
               } `}
-              onClick={() => setData({ ...data, number_of_grids: i + 3 })}>
+              onClick={() =>
+                dispatch(
+                  setSettings({
+                    ...settings,
+                    number_of_grids: (i + 3) as 3 | 4 | 5,
+                  })
+                )
+              }>
               <p className=' font-bold'>
                 {i + 3} X {i + 3}
               </p>
@@ -43,11 +52,11 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
               <div
                 key={`${i}-${j}`}
                 className={`w-full h-[2rem] rounded-sm shadow-sm cursor-pointer ${
-                  i < data?.number_of_grids && j < data?.number_of_grids
+                  i < settings?.number_of_grids && j < settings?.number_of_grids
                     ? (((hoverGrid ?? 0) === j && i <= (hoverGrid ?? 0)) ||
                         ((hoverGrid ?? 0) === i && j <= (hoverGrid ?? 0))) &&
-                      (hoverGrid ?? 0) >= 2
-                      ? "bg-red-400"
+                      (hoverGrid ?? 0) >= 3
+                      ? "bg-red-300"
                       : ` bg-[#4953ff]`
                     : ((hoverGrid ?? 0) === j && i <= (hoverGrid ?? 0)) ||
                       ((hoverGrid ?? 0) === i && j <= (hoverGrid ?? 0))
@@ -55,12 +64,24 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
                     : " bg-gray-100"
                 } `}
                 onMouseMove={() => setHoverGrid(i > j ? i : j)}
+                onMouseLeave={() => setHoverGrid(0)}
                 onClick={() =>
-                  setData({
-                    ...data,
-                    number_of_grids:
-                      i === 4 || j === 4 ? 5 : i === 3 || j === 3 ? 4 : 3,
-                  })
+                  dispatch(
+                    setSettings({
+                      ...settings,
+                      number_of_grids:
+                        i === 4 || j === 4
+                          ? settings?.number_of_grids === 4 ||
+                            settings?.number_of_grids === 3
+                            ? 5
+                            : 4
+                          : i === 3 || j === 3
+                          ? settings?.number_of_grids === 3
+                            ? 4
+                            : 3
+                          : 3,
+                    })
+                  )
                 }
               />
             ))
@@ -68,23 +89,28 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
         </div>
       </div>
 
-      <p className=' text-[1rem] font-medium'>Level {hoverGrid}</p>
+      <p className=' text-[1rem] font-medium'>Level </p>
       <div className=' w-full grid gap-1 grid-cols-3 pb-2'>
-        {Array?.from({ length: 3 })?.map((_, i) => (
+        {["Easy", "Medium", "Hard"]?.map((level, i) => (
           <div
             key={i}
-            className={` flex justify-center items-center rounded-md shadow-md ${
-              ["Easy", "Medium", "Hard"][i]?.toLocaleLowerCase() === data?.level
+            className={` flex justify-center items-center rounded-md shadow-md cursor-pointer ${
+              level?.toLocaleLowerCase() === settings?.level
                 ? " bg-[#03052C] text-white"
                 : " bg-[#FAFAFA]"
             } `}
             onClick={() =>
-              setData({
-                ...data,
-                level: ["Easy", "Medium", "Hard"][i]?.toLocaleLowerCase(),
-              })
+              dispatch(
+                setSettings({
+                  ...settings,
+                  level: level?.toLocaleLowerCase() as
+                    | "medium"
+                    | "easy"
+                    | "hard",
+                })
+              )
             }>
-            <p className=' font-bold'>{["Easy", "Medium", "Hard"][i]}</p>
+            <p className=' font-bold'>{level}</p>
           </div>
         ))}
       </div>

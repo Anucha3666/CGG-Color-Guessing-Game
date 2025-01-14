@@ -1,23 +1,26 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export type TUtilsState = {
-  state: string;
+  settings: {
+    number_of_grids: 3 | 4 | 5;
+    level: "easy" | "medium" | "hard";
+  };
 };
 
 const initialState: TUtilsState = {
-  state: "",
+  settings: { number_of_grids: 3, level: "easy" },
 };
 
 const utilsSlice = createSlice({
   name: "utils",
   initialState,
   reducers: {
-    setState: (state, action: PayloadAction<string>) => {
-      state.state = action.payload;
+    setSettings: (state, action: PayloadAction<TUtilsState["settings"]>) => {
+      state.settings = action.payload;
     },
   },
 });
 
-export const { setState } = utilsSlice.actions;
+export const { setSettings } = utilsSlice.actions;
 
 export default utilsSlice.reducer;
