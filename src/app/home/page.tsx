@@ -122,13 +122,44 @@ export default function HomePage() {
                 style={{
                   background: `${gameDatasets[dataSet]?.color}${
                     (settings?.level === "easy"
-                      ? ["1", "2", "3", "4", "5", "6", "7", "8", "9", "F"]
-                      : settings?.level === "medium"
-                      ? ["3", "5", "6", "7", "9", "A", "B", "C", "D", "F"]
-                      : ["5", "6", "7", "8", "9", "A", "B", "C", "E", "F"])[
-                      i === gameDatasets[dataSet]?.correct ? dataSet : 9
-                    ]
-                  }0`,
+                      ? [
+                          "AD",
+                          "B0",
+                          "B2",
+                          "B4",
+                          "B6",
+                          "B8",
+                          "BA",
+                          "BB",
+                          "BD",
+                          "FF",
+                        ]
+                      : settings?.level === "normal"
+                      ? [
+                          "CD",
+                          "D0",
+                          "D2",
+                          "D4",
+                          "D6",
+                          "D8",
+                          "DA",
+                          "DB",
+                          "DD",
+                          "FF",
+                        ]
+                      : [
+                          "ED",
+                          "F0",
+                          "F2",
+                          "F4",
+                          "F6",
+                          "F8",
+                          "FA",
+                          "FB",
+                          "FD",
+                          "FF",
+                        ])[i === gameDatasets[dataSet]?.correct ? dataSet : 9]
+                  }`,
                 }}
                 onClick={() => {
                   if (!isGameOver) {

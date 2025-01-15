@@ -91,7 +91,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
 
       <p className=' text-[1rem] font-medium'>Level </p>
       <div className=' w-full grid gap-1 grid-cols-3 pb-2'>
-        {["Easy", "Medium", "Hard"]?.map((level, i) => (
+        {["Easy", "Normal", "Hard"]?.map((level, i) => (
           <div
             key={i}
             className={` flex justify-center items-center rounded-md shadow-md cursor-pointer ${
@@ -104,7 +104,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
                 setSettings({
                   ...settings,
                   level: level?.toLocaleLowerCase() as
-                    | "medium"
+                    | "normal"
                     | "easy"
                     | "hard",
                 })

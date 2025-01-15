@@ -3,7 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 export type TUtilsState = {
   settings: {
     number_of_grids: 3 | 4 | 5;
-    level: "easy" | "medium" | "hard";
+    level: "easy" | "normal" | "hard";
   };
 };
 
