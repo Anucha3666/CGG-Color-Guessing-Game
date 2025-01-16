@@ -2,6 +2,7 @@
 
 import { useAppSelector } from "@/store/hook";
 import { TGameData } from "@/types";
+import { cookieUtils } from "@/utils/cookie";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
@@ -48,6 +49,8 @@ export default function HomePage() {
     : gameDatasets.findIndex(({ answer }) => answer === null) ??
       gameDatasets?.length;
 
+  console.log(cookieUtils?.get("HISTORY_GAME"));
+
   useEffect(() => {
     if (timer > 0 && !isGameOver) {
       const time = setTimeout(() => setTimer(timer - 1), 10);
@@ -61,12 +64,20 @@ export default function HomePage() {
             ?.concat(gameDatasets?.slice(dataSet + 1))
         );
       }
+
+      cookieUtils.set(
+        "HISTORY_GAME",
+        ((cookieUtils?.get("HISTORY_GAME") ?? []) as TGameData[][])
+          ?.filter((item) => (item?.length ?? 0) !== 0)
+          ?.concat([gameDatasets])
+      );
     }
   }, [timer, isGameOver, dataSet, gameDatasets]);
 
   useEffect(() => {
     setTimer(time);
     GenerateGameData();
+    // cookieUtils?.delete("HISTORY_GAME");
   }, []);
 
   return (
