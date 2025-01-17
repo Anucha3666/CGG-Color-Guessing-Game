@@ -49,8 +49,6 @@ export default function HomePage() {
     : gameDatasets.findIndex(({ answer }) => answer === null) ??
       gameDatasets?.length;
 
-  console.log(cookieUtils?.get("HISTORY_GAME"));
-
   useEffect(() => {
     if (timer > 0 && !isGameOver) {
       const time = setTimeout(() => setTimer(timer - 1), 10);
