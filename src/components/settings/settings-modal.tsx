@@ -16,7 +16,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
   const [hoverGrid, setHoverGrid] = useState<null | number>(null);
 
   return (
-    <Modal {...{ open, onCancel }}>
+    <Modal layoutId='setting-modal' {...{ open, onCancel }}>
       <div className='flex justify-between w-full'>
         <p className=' text-lg font-bold'>Setting</p>
       </div>

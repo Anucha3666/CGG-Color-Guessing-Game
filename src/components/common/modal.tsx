@@ -5,20 +5,27 @@ type ModalProps = {
   open?: boolean;
   children?: ReactNode;
   onCancel?: () => void;
+  layoutId?: string;
 };
 
 export const ModalTrigger: FC<{
   children: ReactNode;
   onClick: () => void;
-}> = ({ onClick, children }) => {
+  layoutId?: string;
+}> = ({ onClick, children, layoutId = "modal" }) => {
   return (
-    <motion.div layout layoutId='setting-modal' onClick={onClick}>
+    <motion.div layout layoutId={layoutId} onClick={onClick}>
       {children}
     </motion.div>
   );
 };
 
-export const Modal: FC<ModalProps> = ({ open, children, onCancel }) => {
+export const Modal: FC<ModalProps> = ({
+  open,
+  children,
+  onCancel,
+  layoutId = "modal",
+}) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -35,7 +42,7 @@ export const Modal: FC<ModalProps> = ({ open, children, onCancel }) => {
       onClick={handleOutsideClick}>
       <motion.div
         layout
-        layoutId='setting-modal'
+        layoutId={layoutId}
         className='w-[25rem] h-max bg-white z-50 rounded-md p-2 relative'
         ref={modalRef}>
         <div

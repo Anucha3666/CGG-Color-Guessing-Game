@@ -23,7 +23,9 @@ export const AppNavbar = () => {
   return (
     <div className='w-screen flex gap-1 p-2 h-min z-20'>
       <div className=' absolute top-2  right-2 flex gap-2 '>
-        <ModalTrigger onClick={() => setIsOpenHistoryModal(true)}>
+        <ModalTrigger
+          layoutId='history-modal'
+          onClick={() => setIsOpenHistoryModal(true)}>
           <button className=' p-2 rounded-md flex gap-1 backdrop-blur-sm bg-[#FFFFFF40] text-white font-medium hover:scale-105 shadow-md'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -41,7 +43,9 @@ export const AppNavbar = () => {
             </svg>
           </button>
         </ModalTrigger>
-        <ModalTrigger onClick={() => setIsOpenSettingsModal(true)}>
+        <ModalTrigger
+          layoutId='setting-modal'
+          onClick={() => setIsOpenSettingsModal(true)}>
           <button className=' p-2 rounded-md flex gap-1 backdrop-blur-sm bg-[#FFFFFF40] text-white font-medium hover:scale-105 shadow-md'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -97,13 +101,13 @@ export const AppNavbar = () => {
           )}
         </button>
       </div>
-      <SettingsModal
-        open={isOpenSettingsModal}
-        onCancel={() => setIsOpenSettingsModal(false)}
-      />
       <HistoryModal
         open={isOpenHistoryModal}
         onCancel={() => setIsOpenHistoryModal(false)}
+      />
+      <SettingsModal
+        open={isOpenSettingsModal}
+        onCancel={() => setIsOpenSettingsModal(false)}
       />
     </div>
   );
