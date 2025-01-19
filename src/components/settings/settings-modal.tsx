@@ -1,9 +1,9 @@
 "use cline";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Modal } from "../common/modal";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setSettings } from "@/store/features/utils.features";
+import { cookieUtils } from "@/utils/cookie";
+import { TSettings } from "@/types";
 
 export type SettingsModalProps = {
   open?: boolean;
@@ -11,10 +11,28 @@ export type SettingsModalProps = {
 };
 
 export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
-  const { settings } = useAppSelector((store) => store?.utils);
-  const dispatch = useAppDispatch();
   const [hoverGrid, setHoverGrid] = useState<null | number>(null);
 
+  const [settings, setSettings] = useState<TSettings>({
+    number_of_grids: 3,
+    level: "normal",
+  });
+
+  useEffect(() => {
+    const handleClick = () => {
+      const req = (cookieUtils?.get("SETTINGS") ?? {
+        number_of_grids: 3,
+        level: "normal",
+      }) as TSettings;
+      setSettings(req);
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
   return (
     <Modal layoutId='setting-modal' {...{ open, onCancel }}>
       <div className='flex justify-between w-full'>
@@ -33,12 +51,10 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
                   : " bg-[#FAFAFA]"
               } `}
               onClick={() =>
-                dispatch(
-                  setSettings({
-                    ...settings,
-                    number_of_grids: (i + 3) as 3 | 4 | 5,
-                  })
-                )
+                cookieUtils?.set("SETTINGS", {
+                  ...settings,
+                  number_of_grids: (i + 3) as 3 | 4 | 5,
+                })
               }>
               <p className=' font-bold'>
                 {i + 3} X {i + 3}
@@ -66,22 +82,20 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
                 onMouseMove={() => setHoverGrid(i > j ? i : j)}
                 onMouseLeave={() => setHoverGrid(0)}
                 onClick={() =>
-                  dispatch(
-                    setSettings({
-                      ...settings,
-                      number_of_grids:
-                        i === 4 || j === 4
-                          ? settings?.number_of_grids === 4 ||
-                            settings?.number_of_grids === 3
-                            ? 5
-                            : 4
-                          : i === 3 || j === 3
-                          ? settings?.number_of_grids === 3
-                            ? 4
-                            : 3
-                          : 3,
-                    })
-                  )
+                  cookieUtils?.set("SETTINGS", {
+                    ...settings,
+                    number_of_grids:
+                      i === 4 || j === 4
+                        ? settings?.number_of_grids === 4 ||
+                          settings?.number_of_grids === 3
+                          ? 5
+                          : 4
+                        : i === 3 || j === 3
+                        ? settings?.number_of_grids === 3
+                          ? 4
+                          : 3
+                        : 3,
+                  })
                 }
               />
             ))
@@ -100,15 +114,10 @@ export const SettingsModal: FC<SettingsModalProps> = ({ open, onCancel }) => {
                 : " bg-[#FAFAFA]"
             } `}
             onClick={() =>
-              dispatch(
-                setSettings({
-                  ...settings,
-                  level: level?.toLocaleLowerCase() as
-                    | "normal"
-                    | "easy"
-                    | "hard",
-                })
-              )
+              cookieUtils?.set("SETTINGS", {
+                ...settings,
+                level: level?.toLocaleLowerCase() as "normal" | "easy" | "hard",
+              })
             }>
             <p className=' font-bold'>{level}</p>
           </div>

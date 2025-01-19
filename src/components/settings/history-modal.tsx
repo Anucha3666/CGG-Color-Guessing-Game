@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { Modal } from "../common/modal";
 import { cookieUtils } from "@/utils/cookie";
-import { TGameData } from "@/types";
+import { THistory } from "@/types";
 
 export type HistoryModalProps = {
   open?: boolean;
@@ -11,14 +11,22 @@ export type HistoryModalProps = {
 };
 
 export const HistoryModal: FC<HistoryModalProps> = ({ open, onCancel }) => {
-  const [data, setData] = useState<TGameData[][]>([]);
+  const [data, setData] = useState<THistory[]>([]);
 
   useEffect(() => {
-    const req = (
-      (cookieUtils?.get("HISTORY_GAME") ?? []) as TGameData[][]
-    )?.filter((item) => (item?.length ?? 0) !== 0);
-    setData(req);
-  }, [data]);
+    const handleClick = () => {
+      const req = ((cookieUtils?.get("HISTORY") ?? []) as THistory[])?.filter(
+        (item) => (item?.data?.length ?? 0) !== 0
+      );
+      setData(req as THistory[]);
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   return (
     <Modal layoutId='history-modal' {...{ open, onCancel }}>
@@ -36,16 +44,26 @@ export const HistoryModal: FC<HistoryModalProps> = ({ open, onCancel }) => {
         {data?.map((item, i) => (
           <div key={i} className=' border-b-2 pb-2'>
             <div className='flex gap-2 py-1 items-center justify-between font-medium text-nowrap'>
-              {item?.filter((info) => info?.answer !== null)?.length >= 9 ? (
-                <p className=' text-yellow-300 '>Win !</p>
+              {item?.data?.filter((info) => info?.answer !== null)?.length ===
+              0 ? (
+                <p className=' text-yellow-500 '>Win !</p>
               ) : (
                 <p className=' text-red-600 '>
-                  Lose #{item?.filter((info) => info?.answer !== null)?.length}
+                  Lose #
+                  {item?.data?.filter((info) => info?.answer !== null)?.length}
                 </p>
               )}
               <div className='flex gap-2 items-center'>
-                <p className='text-xs'>Number of grids: 3 X 3</p>
-                <p className='text-xs'>Level: Normal</p>
+                <p className='text-xs'>
+                  Number of grids: {item?.number_of_grids} X{" "}
+                  {item?.number_of_grids}
+                </p>
+                <p className='text-xs'>
+                  Level:{" "}
+                  {`${item?.level
+                    ?.slice(0, 1)
+                    ?.toLocaleUpperCase()}${item?.level?.slice(1)}`}
+                </p>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   width='24'
@@ -53,13 +71,13 @@ export const HistoryModal: FC<HistoryModalProps> = ({ open, onCancel }) => {
                   viewBox='0 0 24 24'
                   fill='none'
                   stroke='currentColor'
-                  stroke-width='2'
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                   className=' text-gray-400 hover:text-red-600 cursor-pointer hover:rotate-12 hover:scale-105 active:scale-95'
                   onClick={() => {
                     cookieUtils?.set(
-                      "HISTORY_GAME",
+                      "HISTORY",
                       data?.slice(0, i)?.concat(data?.slice(i + 1))
                     );
                     setData(data?.slice(0, i)?.concat(data?.slice(i + 1)));
@@ -73,21 +91,23 @@ export const HistoryModal: FC<HistoryModalProps> = ({ open, onCancel }) => {
               </div>
             </div>
             <div className=' w-full flex gap-1 flex-wrap'>
-              {item?.map((info, j) => (
+              {item?.data?.map((info, j) => (
                 <div
                   key={j}
-                  className={
-                    " w-[3rem] h-[3rem] grid grid-cols-3 rounded-sm gap-[1px]"
-                  }
+                  className={" w-[3rem] h-[3rem] grid rounded-sm gap-[1px]"}
                   style={{
+                    gridTemplateColumns: `repeat(${item?.number_of_grids}, 1fr)`,
                     border:
-                      item?.filter((info) => info?.answer !== null)?.length -
+                      item?.data?.filter((info) => info?.answer !== null)
+                        ?.length -
                         1 ===
                       j
                         ? "1px solid #FF0000"
                         : "",
                   }}>
-                  {Array.from({ length: 9 })?.map((_, z) => (
+                  {Array.from({
+                    length: item?.number_of_grids * item?.number_of_grids,
+                  })?.map((_, z) => (
                     <div
                       key={z}
                       className=' w-full h-full rounded-sm'
@@ -107,7 +127,7 @@ export const HistoryModal: FC<HistoryModalProps> = ({ open, onCancel }) => {
                           ][info?.answer === z ? z : 9]
                         }`,
                         border:
-                          item?.filter((info) => info?.answer !== null)
+                          item?.data?.filter((info) => info?.answer !== null)
                             ?.length -
                             1 ===
                           j

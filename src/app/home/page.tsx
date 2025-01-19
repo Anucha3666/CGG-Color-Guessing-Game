@@ -1,7 +1,6 @@
 "use client";
 
-import { useAppSelector } from "@/store/hook";
-import { TGameData } from "@/types";
+import { TGameData, THistory, TSettings } from "@/types";
 import { cookieUtils } from "@/utils/cookie";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -9,9 +8,12 @@ import { useEffect, useState } from "react";
 export default function HomePage() {
   const time = 1000;
 
-  const { settings } = useAppSelector((store) => store?.utils);
   const [gameDatasets, setGameDatasets] = useState<TGameData[]>([]);
   const [timer, setTimer] = useState<number>(0);
+  const [settings, setSettings] = useState<TSettings>({
+    number_of_grids: 3,
+    level: "normal",
+  });
 
   const GenerateHEXColor = () => {
     const randomColor =
@@ -64,18 +66,45 @@ export default function HomePage() {
       }
 
       cookieUtils.set(
-        "HISTORY_GAME",
-        ((cookieUtils?.get("HISTORY_GAME") ?? []) as TGameData[][])
-          ?.filter((item) => (item?.length ?? 0) !== 0)
-          ?.concat([gameDatasets])
+        "HISTORY",
+        ((cookieUtils?.get("HISTORY") ?? []) as THistory[])
+          ?.filter((item) => (item?.data?.length ?? 0) !== 0)
+          ?.concat([
+            {
+              number_of_grids: settings?.number_of_grids,
+              level: settings?.level,
+              data: gameDatasets,
+            },
+          ])
       );
     }
   }, [timer, isGameOver, dataSet, gameDatasets]);
 
   useEffect(() => {
+    const handleClick = () => {
+      const req = (cookieUtils?.get("SETTINGS") ?? {
+        number_of_grids: 3,
+        level: "normal",
+      }) as TSettings;
+      setSettings(req);
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    const req = (cookieUtils?.get("SETTINGS") ?? {
+      number_of_grids: 3,
+      level: "normal",
+    }) as TSettings;
+    setSettings(req);
     setTimer(time);
     GenerateGameData();
-    // cookieUtils?.delete("HISTORY_GAME");
+    // cookieUtils?.delete("HISTORY");
   }, []);
 
   return (
@@ -206,9 +235,9 @@ export default function HomePage() {
               viewBox='0 0 24 24'
               fill='none'
               stroke='currentColor'
-              stroke-width='2'
-              // stroke-linecap='round'
-              // stroke-linejoin='round'
+              strokeWidth='2'
+              // strokeLinecap='round'
+              // strokeLinejoin='round'
             >
               <path d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8' />
               <path d='M3 3v5h5' />
