@@ -3,10 +3,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Logo from "@/assets/images/logo-no-background.png";
 import Image from "next/image";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import useSound from "use-sound";
+import introSound from "@/assets/sounds/intro.mp3";
 
 const EntrancePage: FC = ({}) => {
+  const [playIntro] = useSound(introSound, { loop: true });
+
   const router = useRouter();
   const [isStarted, setIsStarted] = useState(false);
 
@@ -18,6 +22,10 @@ const EntrancePage: FC = ({}) => {
       router.push("/home");
     }, 1700);
   };
+
+  useEffect(() => {
+    playIntro();
+  }, [playIntro]);
 
   return (
     <div className='relative h-full overflow-hidden'>
