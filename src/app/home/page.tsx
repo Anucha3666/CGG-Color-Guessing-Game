@@ -249,8 +249,9 @@ export default function HomePage() {
           )}
         </div>
       </motion.div>
-      <WinModal />
-      <LoseModal />
+
+      {isWin && <WinModal />}
+      {isLose && <LoseModal />}
     </>
   );
 }
