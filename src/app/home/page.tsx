@@ -1,7 +1,10 @@
 "use client";
 
 import { LoseModal, WinModal } from "@/components/common";
+import { initSettings } from "@/constants";
 import { TGameData, THistory, TSettings } from "@/types";
+import { gameUtils } from "@/utils";
+
 import { cookieUtils } from "@/utils/cookie";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -11,31 +14,7 @@ export default function HomePage() {
 
   const [gameDatasets, setGameDatasets] = useState<TGameData[]>([]);
   const [timer, setTimer] = useState<number>(0);
-  const [settings, setSettings] = useState<TSettings>({
-    number_of_grids: 3,
-    level: "normal",
-  });
-
-  const GenerateHEXColor = () => {
-    const randomColor =
-      "#" +
-      Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, "0");
-    return randomColor;
-  };
-
-  const GenerateGameData = () => {
-    const information = Array?.from({ length: 9 }, () => ({
-      color: GenerateHEXColor(),
-      correct: Math.floor(
-        Math.random() * (settings?.number_of_grids * settings?.number_of_grids)
-      ),
-      answer: null,
-    }));
-
-    setGameDatasets(information);
-  };
+  const [settings, setSettings] = useState<TSettings>(initSettings);
 
   const isLose = gameDatasets?.find(
     ({ answer, correct }) => answer !== null && answer !== correct
@@ -104,8 +83,7 @@ export default function HomePage() {
     }) as TSettings;
     setSettings(req);
     setTimer(time);
-    GenerateGameData();
-    // cookieUtils?.delete("HISTORY");
+    setGameDatasets(gameUtils?.generate({ settings: req }));
   }, []);
 
   return (
@@ -227,7 +205,7 @@ export default function HomePage() {
             <button
               className=' border-2 border-white p-2 rounded-full flex gap-1 text-white font-medium'
               onClick={() => {
-                GenerateGameData();
+                setGameDatasets(gameUtils?.generate({ settings }));
                 setTimer(time);
               }}>
               Restart
